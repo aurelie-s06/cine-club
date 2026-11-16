@@ -47,7 +47,7 @@ Mes notes et réponses aux questions du TP sont dans [r_sum_du_tp_et_questions.m
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/<votre-utilisateur>/cine-club.git
+git clone https://github.com/aurelie-s06/cine-club.git
 cd cine-club
 
 # 2. Installer les dépendances
