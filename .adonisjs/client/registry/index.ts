@@ -66,6 +66,18 @@ const routes = {
     tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['session.destroy']['types'],
   },
+  'movies.follow.store': {
+    methods: ["POST"],
+    pattern: '/movies/:movie_id/follow',
+    tokens: [{"old":"/movies/:movie_id/follow","type":0,"val":"movies","end":""},{"old":"/movies/:movie_id/follow","type":1,"val":"movie_id","end":""},{"old":"/movies/:movie_id/follow","type":0,"val":"follow","end":""}],
+    types: placeholder as Registry['movies.follow.store']['types'],
+  },
+  'movies.follow.destroy': {
+    methods: ["DELETE"],
+    pattern: '/movies/:movie_id/follow',
+    tokens: [{"old":"/movies/:movie_id/follow","type":0,"val":"movies","end":""},{"old":"/movies/:movie_id/follow","type":1,"val":"movie_id","end":""},{"old":"/movies/:movie_id/follow","type":0,"val":"follow","end":""}],
+    types: placeholder as Registry['movies.follow.destroy']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

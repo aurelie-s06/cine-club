@@ -29,5 +29,13 @@ router
 router
   .group(() => {
     router.post('logout', [controllers.Session, 'destroy'])
+
+    // Alerte de sortie : suivre / ne plus suivre un film à venir
+    router
+      .post('movies/:movie_id/follow', [controllers.MovieFollows, 'store'])
+      .as('movies.follow.store')
+    router
+      .delete('movies/:movie_id/follow', [controllers.MovieFollows, 'destroy'])
+      .as('movies.follow.destroy')
   })
   .use(middleware.auth())

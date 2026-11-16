@@ -10,6 +10,10 @@ export interface ApiDefinition {
       index: typeof routes['movies.reviews.index']
       store: typeof routes['movies.reviews.store']
     }
+    follow: {
+      store: typeof routes['movies.follow.store']
+      destroy: typeof routes['movies.follow.destroy']
+    }
   }
   newAccount: {
     create: typeof routes['new_account.create']

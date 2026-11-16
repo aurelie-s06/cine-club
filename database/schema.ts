@@ -7,6 +7,23 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class MovieFollowSchema extends BaseModel {
+  static $columns = ['createdAt', 'id', 'movieId', 'notifiedAt', 'updatedAt', 'userId'] as const
+  $columns = MovieFollowSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare movieId: number
+  @column.dateTime()
+  declare notifiedAt: DateTime | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
 export class MovieSchema extends BaseModel {
   static $columns = ['backdropPath', 'createdAt', 'id', 'originalLanguage', 'originalTitle', 'overview', 'popularity', 'posterPath', 'releaseDate', 'title', 'tmdbId', 'updatedAt', 'voteAverage', 'voteCount'] as const
   $columns = MovieSchema.$columns
@@ -38,6 +55,70 @@ export class MovieSchema extends BaseModel {
   declare voteAverage: number
   @column()
   declare voteCount: number
+}
+
+export class QueueJobSchema extends BaseModel {
+  static $columns = ['acquiredAt', 'data', 'dedupAt', 'dedupId', 'dedupTtl', 'error', 'executeAt', 'finishedAt', 'id', 'queue', 'score', 'status', 'workerId'] as const
+  $columns = QueueJobSchema.$columns
+  @column()
+  declare acquiredAt: bigint | number | null
+  @column()
+  declare data: string
+  @column()
+  declare dedupAt: bigint | number | null
+  @column()
+  declare dedupId: string | null
+  @column()
+  declare dedupTtl: bigint | number | null
+  @column()
+  declare error: string | null
+  @column()
+  declare executeAt: bigint | number | null
+  @column()
+  declare finishedAt: bigint | number | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare queue: string
+  @column()
+  declare score: bigint | number | null
+  @column()
+  declare status: string
+  @column()
+  declare workerId: string | null
+}
+
+export class QueueScheduleSchema extends BaseModel {
+  static $columns = ['createdAt', 'cronExpression', 'everyMs', 'fromDate', 'id', 'lastRunAt', 'name', 'nextRunAt', 'payload', 'runCount', 'runLimit', 'status', 'timezone', 'toDate'] as const
+  $columns = QueueScheduleSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare cronExpression: string | null
+  @column()
+  declare everyMs: bigint | number | null
+  @column()
+  declare fromDate: bigint | number | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare lastRunAt: bigint | number | null
+  @column()
+  declare name: string
+  @column()
+  declare nextRunAt: bigint | number | null
+  @column()
+  declare payload: string
+  @column()
+  declare runCount: number
+  @column()
+  declare runLimit: number | null
+  @column()
+  declare status: string
+  @column()
+  declare timezone: string
+  @column()
+  declare toDate: bigint | number | null
 }
 
 export class UserSchema extends BaseModel {

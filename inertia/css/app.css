@@ -385,6 +385,34 @@ button:hover {
   color: var(--gray-8);
 }
 
+/* Alerte de sortie */
+.release-alert {
+  margin: 0 0 24px;
+  font-size: 14px;
+  color: var(--gray-7);
+}
+.release-alert form {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.release-alert button {
+  width: auto;
+  padding: 10px 16px;
+}
+.release-alert button.secondary {
+  background: transparent;
+  color: var(--gray-12);
+  border: 1px solid var(--gray-4);
+}
+.release-alert button.secondary:hover {
+  background: var(--gray-3);
+}
+.release-alert a {
+  text-decoration: underline;
+}
+
 /* Home */
 .featured {
   position: relative;

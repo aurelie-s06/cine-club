@@ -14,6 +14,8 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'movies.follow.store': { paramsTuple: [ParamValue]; params: {'movie_id': ParamValue} }
+    'movies.follow.destroy': { paramsTuple: [ParamValue]; params: {'movie_id': ParamValue} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -36,6 +38,10 @@ export type ScannedRoutes = {
     'new_account.store': { paramsTuple?: []; params?: {} }
     'session.store': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
+    'movies.follow.store': { paramsTuple: [ParamValue]; params: {'movie_id': ParamValue} }
+  }
+  DELETE: {
+    'movies.follow.destroy': { paramsTuple: [ParamValue]; params: {'movie_id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

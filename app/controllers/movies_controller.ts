@@ -1,4 +1,5 @@
 import Movie from '#models/movie'
+import MovieFollow from '#models/movie_follow'
 import MovieTransformer from '#transformers/movie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -21,11 +22,23 @@ export default class MoviesController {
     })
   }
 
-  async show({ params, inertia }: HttpContext) {
+  async show({ params, inertia, auth }: HttpContext) {
     const movie = await Movie.findOrFail(params.id)
+
+    const isFollowing = auth.user
+      ? !!(await MovieFollow.query()
+          .where('userId', auth.user.id)
+          .where('movieId', movie.id)
+          .first())
+      : false
 
     return inertia.render('movies/show', {
       movie: MovieTransformer.transform(movie),
+      releaseAlert: {
+        // La décision se prend ici, pas dans la vue
+        canFollow: movie.isUpcoming,
+        isFollowing,
+      },
     })
   }
 }

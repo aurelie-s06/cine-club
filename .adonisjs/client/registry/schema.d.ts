@@ -127,4 +127,28 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/session_controller').default['destroy']>>>
     }
   }
+  'movies.follow.store': {
+    methods: ["POST"]
+    pattern: '/movies/:movie_id/follow'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { movie_id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/movie_follows_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/movie_follows_controller').default['store']>>>
+    }
+  }
+  'movies.follow.destroy': {
+    methods: ["DELETE"]
+    pattern: '/movies/:movie_id/follow'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { movie_id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/movie_follows_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/movie_follows_controller').default['destroy']>>>
+    }
+  }
 }

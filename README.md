@@ -15,6 +15,7 @@ Ciné-club est une application web de catalogue de films. Les films sont import�
 - Liste des films avec **recherche** et **pagination**
 - Fiche détaillée d'un film
 - Inscription, connexion et déconnexion des utilisateurs
+- **Alerte de sortie** : suivre un film pas encore sorti et recevoir un email le jour de sa sortie
 
 ## Stack technique
 
@@ -24,6 +25,7 @@ Ciné-club est une application web de catalogue de films. Les films sont import�
 | Front-end | [Inertia.js](https://inertiajs.com/) + React 19, Vite |
 | Base de données | SQLite (`better-sqlite3`) |
 | API externe | TMDB, appelée avec le client HTTP `ky` |
+| Emails & tâches | `@adonisjs/mail` (SMTP), `@adonisjs/queue` (file d'attente + tâches planifiées) |
 
 ## Ce que j'ai appris
 
@@ -33,6 +35,7 @@ Ciné-club est une application web de catalogue de films. Les films sont import�
 - Relier un back-end AdonisJS à un front React grâce à Inertia
 - Paginer et filtrer des résultats côté serveur
 - Mettre en place une authentification par session
+- Envoyer des emails en arrière-plan avec une file d'attente et une tâche planifiée (cron)
 
 Mes notes et réponses aux questions du TP sont dans [r_sum_du_tp_et_questions.md](r_sum_du_tp_et_questions.md).
 
@@ -79,6 +82,34 @@ npm run dev
 ```
 
 L'application est disponible sur [http://localhost:3333](http://localhost:3333).
+
+### Emails et alertes de sortie
+
+Les emails partent d'un **second processus**, le worker, jamais de la requête HTTP. Pour les recevoir en développement, lancez un serveur SMTP de test comme [Mailpit](https://mailpit.axllent.org/) (interface sur [http://localhost:8025](http://localhost:8025)) :
+
+```bash
+# Terminal 1 : capture les emails sur localhost:1025
+mailpit
+
+# Terminal 2 : le serveur web
+npm run dev
+
+# Terminal 3 : le worker qui exécute les tâches (dont l'envoi des emails)
+node ace queue:work
+```
+
+## Alerte de sortie : comment ça marche
+
+1. Sur la fiche d'un film **pas encore sorti**, un utilisateur connecté clique sur « M'alerter à la sortie ». La requête enregistre une ligne dans `movie_follows` et répond tout de suite, **sans envoyer d'email**.
+2. Tous les matins à 8 h (heure de Paris), la tâche planifiée `DispatchReleaseAlerts` ([start/scheduler.ts](start/scheduler.ts)) cherche les films qui sortent ce jour-là.
+3. Elle dépose un job `SendReleaseAlert` **par destinataire** dans la file. Le worker envoie l'email, puis note la date d'envoi (`notified_at`) : un email ne part jamais deux fois, et un échec est retenté jusqu'à 3 fois sans renvoyer les autres.
+
+Pour déclencher l'envoi à la main sans attendre 8 h :
+
+```bash
+node ace movies:release-alerts          # dépose la tâche dans la file (le worker la traite)
+node ace movies:release-alerts --sync   # prépare les envois immédiatement
+```
 
 ## Scripts utiles
 
