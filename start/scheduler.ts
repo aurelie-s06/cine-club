@@ -8,8 +8,16 @@
 |
 */
 
+import SyncMovies from '#jobs/sync_movies'
 import DispatchReleaseAlerts from '#jobs/dispatch_release_alerts'
 import { RELEASE_TIMEZONE } from '#models/movie'
+
+/**
+ * Mise à jour du catalogue depuis TMDB toutes les 6 heures (0 h, 6 h, 12 h,
+ * 18 h). Le passage de 6 h précède les alertes de 8 h, qui s'appuient donc
+ * sur des dates de sortie à jour.
+ */
+await SyncMovies.schedule({}).id('movies-sync').cron('0 */6 * * *').timezone(RELEASE_TIMEZONE).run()
 
 /**
  * Alertes de sortie : tous les matins à 8 h, heure de Paris.

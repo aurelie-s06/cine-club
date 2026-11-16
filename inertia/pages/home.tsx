@@ -9,10 +9,11 @@ type PageProps = InertiaProps<{
   featured: Data.Movie | null
   popular: MovieSummary[]
   newest: MovieSummary[]
+  upcoming: MovieSummary[]
   topRated: MovieSummary[]
 }>
 
-export default function Home({ featured, popular, newest, topRated }: PageProps) {
+export default function Home({ featured, popular, newest, upcoming, topRated }: PageProps) {
   return (
     <>
       {featured && (
@@ -43,6 +44,7 @@ export default function Home({ featured, popular, newest, topRated }: PageProps)
 
       <MovieRail title="Populaires en ce moment" movies={popular} />
       <MovieRail title="Dernières sorties" movies={newest} />
+      <MovieRail title="Prochainement" movies={upcoming} />
       <MovieRail title="Les mieux notés" movies={topRated} />
     </>
   )

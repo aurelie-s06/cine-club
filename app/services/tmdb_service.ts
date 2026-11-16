@@ -34,9 +34,33 @@ export class TmdbService {
   /**
    * Récupère une page de films populaires (20 films par page).
    */
-  async popular(page: number = 1): Promise<TmdbMovie[]> {
+  popular(page: number = 1): Promise<TmdbMovie[]> {
+    return this.#list('movie/popular', page)
+  }
+
+  /**
+   * Films actuellement au cinéma en France.
+   * https://developer.themoviedb.org/reference/movie-now-playing-list
+   */
+  nowPlaying(page: number = 1): Promise<TmdbMovie[]> {
+    return this.#list('movie/now_playing', page)
+  }
+
+  /**
+   * Prochaines sorties en France.
+   * https://developer.themoviedb.org/reference/movie-upcoming-list
+   */
+  upcoming(page: number = 1): Promise<TmdbMovie[]> {
+    return this.#list('movie/upcoming', page)
+  }
+
+  /**
+   * Les trois listes ont le même format de réponse. La région FR donne les
+   * dates de sortie françaises, celles utilisées pour les alertes.
+   */
+  async #list(endpoint: string, page: number): Promise<TmdbMovie[]> {
     const response = await this.#client
-      .get('movie/popular', { searchParams: { page, language: 'fr-FR' } })
+      .get(endpoint, { searchParams: { page, language: 'fr-FR', region: 'FR' } })
       .json<{ results: TmdbMovie[] }>()
 
     return response.results

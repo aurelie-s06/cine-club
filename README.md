@@ -10,8 +10,9 @@ Ciné-club est une application web de catalogue de films. Les films sont import�
 
 ### Fonctionnalités
 
-- Import des films populaires depuis l'API TMDB (seeder)
-- Page d'accueil avec des sélections (à la une, populaires, récents, mieux notés)
+- Import des films depuis l'API TMDB : populaires, à l'affiche et prochaines sorties
+- **Mise à jour automatique** du catalogue toutes les 6 heures (nouveaux films, notes, dates de sortie)
+- Page d'accueil avec des sélections (à la une, populaires, dernières sorties, prochainement, mieux notés)
 - Liste des films avec **recherche** et **pagination**
 - Fiche détaillée d'un film
 - Inscription, connexion et déconnexion des utilisateurs
@@ -97,6 +98,21 @@ npm run dev
 # Terminal 3 : le worker qui exécute les tâches (dont l'envoi des emails)
 node ace queue:work
 ```
+
+## Mise à jour automatique du catalogue
+
+Toutes les 6 heures (0 h, 6 h, 12 h et 18 h, heure de Paris), la tâche planifiée `SyncMovies` ([start/scheduler.ts](start/scheduler.ts)) interroge TMDB et lit trois listes : **films populaires**, **films à l'affiche** et **prochaines sorties** en France. Les nouveaux films sont ajoutés, et ceux qui existent déjà sont mis à jour (note, popularité, date de sortie). Grâce à `updateOrCreateMany` sur `tmdb_id`, une synchro relancée ne crée jamais de doublon.
+
+Le passage de 6 h a lieu avant les alertes de 8 h, qui travaillent donc avec des dates de sortie à jour. Comme pour les emails, c'est le **worker** (`node ace queue:work`) qui exécute la tâche.
+
+Pour lancer la mise à jour à la main :
+
+```bash
+node ace movies:sync          # dépose la tâche dans la file (le worker la traite)
+node ace movies:sync --sync   # synchronise immédiatement
+```
+
+Le seeder (`node ace db:seed`) utilise la même synchro pour remplir le catalogue la première fois.
 
 ## Alerte de sortie : comment ça marche
 
