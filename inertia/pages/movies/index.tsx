@@ -25,26 +25,50 @@ export default function MoviesIndex({ movies, search }: PageProps) {
   const qs = (page: number) => (search ? { page, search } : { page })
 
   return (
-    <>
+    <div className="listing container">
       <div className="page-header">
         <div>
+          <span className="eyebrow">Catalogue</span>
           <h1>Films</h1>
-          <p>{total} films au catalogue</p>
+          <p>
+            {search
+              ? `${total} résultat${total > 1 ? 's' : ''} pour « ${search} »`
+              : `${total} films au catalogue`}
+          </p>
         </div>
 
-        <form method="get" action="/movies" className="search-form">
-          <input
-            type="search"
-            name="search"
-            placeholder="Rechercher un film"
-            defaultValue={search}
-          />
+        <form method="get" action="/movies" className="search-form" role="search">
+          <div className="search-field">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
+              <path
+                d="m20 20-3.5-3.5"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+            <input
+              type="search"
+              name="search"
+              placeholder="Rechercher un film"
+              aria-label="Rechercher un film"
+              defaultValue={search}
+            />
+          </div>
           <button type="submit">Rechercher</button>
         </form>
       </div>
 
       {movies.data.length === 0 ? (
-        <p className="empty">Aucun film ne correspond à cette recherche.</p>
+        <div className="empty">
+          <strong>Aucun film trouvé</strong>
+          Essayez un autre titre, ou{' '}
+          <Link route="movies.index" className="text-link">
+            parcourez tout le catalogue
+          </Link>
+          .
+        </div>
       ) : (
         <ul className="movie-grid">
           {movies.data.map((movie) => (
@@ -56,22 +80,22 @@ export default function MoviesIndex({ movies, search }: PageProps) {
       )}
 
       {lastPage > 1 && (
-        <nav className="pagination">
+        <nav className="pagination" aria-label="Pagination">
           {currentPage > 1 && (
-            <Link route="movies.index" qs={qs(currentPage - 1)}>
-              ‹ Précédent
+            <Link route="movies.index" qs={qs(currentPage - 1)} className="button secondary">
+              ← Précédent
             </Link>
           )}
           <span>
             Page {currentPage} sur {lastPage}
           </span>
           {currentPage < lastPage && (
-            <Link route="movies.index" qs={qs(currentPage + 1)}>
-              Suivant ›
+            <Link route="movies.index" qs={qs(currentPage + 1)} className="button secondary">
+              Suivant →
             </Link>
           )}
         </nav>
       )}
-    </>
+    </div>
   )
 }

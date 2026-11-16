@@ -21,16 +21,22 @@ export default function Home({ featured, popular, newest, topRated }: PageProps)
             <img className="featured-backdrop" src={featured.backdropUrl} alt="" />
           )}
 
-          <div className="featured-content">
-            <span className="eyebrow">À l&apos;affiche</span>
-            <h1>{featured.title}</h1>
-            <p className="featured-meta">
-              {featured.releaseYear ?? '—'} · {featured.voteAverage.toFixed(1)}/10
-            </p>
-            {featured.overview && <p className="featured-overview">{featured.overview}</p>}
-            <Link className="button" route="movies.show" routeParams={{ id: featured.id }}>
-              Découvrir le film
-            </Link>
+          <div className="container">
+            <div className="featured-content">
+              <span className="eyebrow">À l&apos;affiche</span>
+              <h1>{featured.title}</h1>
+              <ul className="meta">
+                <li className="rating">★ {featured.voteAverage.toFixed(1)}</li>
+                {featured.releaseYear && <li>{featured.releaseYear}</li>}
+                {featured.originalLanguage && (
+                  <li className="chip">{featured.originalLanguage.toUpperCase()}</li>
+                )}
+              </ul>
+              {featured.overview && <p className="featured-overview">{featured.overview}</p>}
+              <Link className="button" route="movies.show" routeParams={{ id: featured.id }}>
+                Découvrir le film
+              </Link>
+            </div>
           </div>
         </section>
       )}

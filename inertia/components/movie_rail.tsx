@@ -13,10 +13,12 @@ export default function MovieRail({ title, movies }: MovieRailProps) {
   }
 
   return (
-    <section className="rail">
+    <section className="rail container">
       <div className="rail-header">
         <h2>{title}</h2>
-        <Link route="movies.index">Tout voir ›</Link>
+        <Link route="movies.index" className="text-link">
+          Tout voir →
+        </Link>
       </div>
 
       <ul className="movie-grid">
